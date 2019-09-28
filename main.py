@@ -15,18 +15,45 @@ def hello_world():
 @app.route('/api/creditcards',  methods=['GET'])
 def allCreditCards():
     # TODO DIsplay all credit cards
-@app.route('/api/addcreditcard', id,  methods=['POST'])
+    return
+
+
+
+@app.route('/api/addcreditcard',  methods=['POST'])
 def addCreditCard(id):
     #TODO Add a credit card
-@app.route('/api/creditcard/creditscore', creditScore, metods=['GET'])
+    request.headers['Content-Type'] == 'application/json'
+    return "JSON Message: " + json.dumps(request.json)
+
+
+@app.route('/api/creditcard/<creditscore>', methods=['GET'])
 def matchCardToScore(creditScore):
     #TODO matches credit card with credit score
-@app.route('/api/adduser', user, methods=['POST'])
+    return
+@app.route('/api/adduser', methods=['POST'])
 def addUser(user):
     #TODO add a user when they sign up
-@app.route('/api/getuser/<int:task_id>', user, methods=['GET'])
+    request.headers['Content-Type'] == 'application/json'
+    return "JSON Message: " + json.dumps(request.json)
+@app.route('/api/getuser/<task_id>', methods=['GET'])
 def getUser(task_id):
     #TODO add a user when they sign up
+    request.headers['Content-Type'] == 'application/json'
+    return "JSON Message: " + json.dumps(request.json)
+@app.route('/api/updateUser', methods=['PUT'])
+def updateUser(user):
+    #TODO update a users info
+    request.headers['Content-Type'] == 'application/json'
+    return "JSON Message: " + json.dumps(request.json)
+
+
+
+def calcPayoffPeriod(timeFrame, cost):
+    return cost / timeFram
+
+
+
+
 
 
 if __name__ == '__main__':
