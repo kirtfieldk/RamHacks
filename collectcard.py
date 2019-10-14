@@ -1,24 +1,25 @@
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import requests
+import mysql.connector
 # URLs to scrape through
 url = [
 "https://creditcards.chase.com/cash-back-credit-cards/chase-freedom-unlimited?CELL=6TKX&jp_aid=cc/mptarg1/int/FREU/ccrew1",
-"https://creditcards.chase.com/rewards-credit-cards/chase-sapphire-preferred?CELL=6TKX&jp_aid=cc/mptarg1/int/SAPP/ccrew2",
-"https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy-boundless?CELL=6TKX&jp_aid=cc/mptarg1/int/MARC/cctrav1",
-"https://creditcards.chase.com/cash-back-credit-cards/chase-freedom?CELL=6TKX",
-"https://creditcards.chase.com/rewards-credit-cards/chase-sapphire-reserve?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/southwest-priority?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/southwest-plus?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/southwest-premier?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/united-explorer?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/united-travelbank?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/united-mileageplus-club?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/british-airways?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/aer-lingus?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy-bold?CELL=6TKX",
-"https://creditcards.chase.com/travel-credit-cards/world-of-hyatt-credit-card?CELL=6TKX",
-"https://creditcards.chase.com/rewards-credit-cards/disney-premier?CELL=6TKX"
+# "https://creditcards.chase.com/rewards-credit-cards/chase-sapphire-preferred?CELL=6TKX&jp_aid=cc/mptarg1/int/SAPP/ccrew2",
+# "https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy-boundless?CELL=6TKX&jp_aid=cc/mptarg1/int/MARC/cctrav1",
+# "https://creditcards.chase.com/cash-back-credit-cards/chase-freedom?CELL=6TKX",
+# "https://creditcards.chase.com/rewards-credit-cards/chase-sapphire-reserve?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/southwest-priority?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/southwest-plus?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/southwest-premier?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/united-explorer?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/united-travelbank?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/united-mileageplus-club?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/british-airways?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/aer-lingus?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy-bold?CELL=6TKX",
+# "https://creditcards.chase.com/travel-credit-cards/world-of-hyatt-credit-card?CELL=6TKX",
+# "https://creditcards.chase.com/rewards-credit-cards/disney-premier?CELL=6TKX"
 # "https://creditcards.chase.com/rewards-credit-cards/disney-rewards?CELL=6TKX",
 # "https://creditcards.chase.com/travel-credit-cards/ihg-rewards-club-premier?CELL=6TKX",
 # "https://creditcards.chase.com/rewards-credit-cards/starbucks-rewards?CELL=6TKX",
@@ -48,6 +49,19 @@ url = [
 # "https://www.capitalone.com/credit-cards/savorone-dining-rewards/"
 ]
 
+# COnnect and create databse
+db = mysql.connector(
+    host="localhost",
+    user = "keithkfield",
+    passwd="1234"
+)
+crsr = db.cursor()
+crsr.execute("CREATE DATABASE creditcards")
+
+for x in crsr:
+    print(x)
+
+
 # CLass for credit card
 class CreditCard:
     # There could be so many perks to havig a credit card
@@ -56,8 +70,10 @@ class CreditCard:
         self.benefits = []
         self.benefits.append(options)
 
-cardArray= []
+
 for data in url:
+    # New arrayeach time
+    cardArray= []
     response = requests.get(data)
     page = urlopen(data)
     soup = BeautifulSoup(page, "html.parser")
@@ -71,7 +87,6 @@ for data in url:
     # TODO STORE IN SQL DATABASE
 
 
-print(cardArray)
 
 
 
