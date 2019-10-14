@@ -51,13 +51,12 @@ url = [
 # CLass for credit card
 class CreditCard:
     # There could be so many perks to havig a credit card
-    def __init__(self, name, apr, benefits, *options):
+    def __init__(self, name, benefits, *options):
         self.name = name
-        self.apr = apr
         self.benefits = []
         self.benefits.append(options)
 
-
+cardArray= []
 for data in url:
     response = requests.get(data)
     page = urlopen(data)
@@ -68,7 +67,11 @@ for data in url:
     benefitsbox = soup.find("div", attrs = {'class', "primary-item"})
     title = titlebox.text.strip()
     benefits = benefitsbox.text().strip()
-    print(title)
+    card = CreditCard(title, cardArray, benefits)
+    # TODO STORE IN SQL DATABASE
+
+
+print(cardArray)
 
 
 
