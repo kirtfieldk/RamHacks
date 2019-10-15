@@ -2,31 +2,44 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import requests
 import sqlite3
+
+
+
+
+# CLass for credit card
+class CreditCard:
+    # There could be so many perks to havig a credit card
+    def __init__(self, name, benefits, *options):
+        self.name = name
+        self.benefits = []
+        self.benefits.append(options)
+
+
 # URLs to scrape through
 url = [
 "https://creditcards.chase.com/cash-back-credit-cards/chase-freedom-unlimited?CELL=6TKX&jp_aid=cc/mptarg1/int/FREU/ccrew1",
-# "https://creditcards.chase.com/rewards-credit-cards/chase-sapphire-preferred?CELL=6TKX&jp_aid=cc/mptarg1/int/SAPP/ccrew2",
-# "https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy-boundless?CELL=6TKX&jp_aid=cc/mptarg1/int/MARC/cctrav1",
-# "https://creditcards.chase.com/cash-back-credit-cards/chase-freedom?CELL=6TKX",
-# "https://creditcards.chase.com/rewards-credit-cards/chase-sapphire-reserve?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/southwest-priority?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/southwest-plus?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/southwest-premier?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/united-explorer?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/united-travelbank?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/united-mileageplus-club?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/british-airways?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/aer-lingus?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy-bold?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/world-of-hyatt-credit-card?CELL=6TKX",
-# "https://creditcards.chase.com/rewards-credit-cards/disney-premier?CELL=6TKX"
-# "https://creditcards.chase.com/rewards-credit-cards/disney-rewards?CELL=6TKX",
-# "https://creditcards.chase.com/travel-credit-cards/ihg-rewards-club-premier?CELL=6TKX",
-# "https://creditcards.chase.com/rewards-credit-cards/starbucks-rewards?CELL=6TKX",
-# "https://creditcards.chase.com/cash-back-credit-cards/amazon-rewards?CELL=6TKX",
-# "https://creditcards.chase.com/small-business-credit-cards/ink-unlimited?CELL=6TKX",
-# "https://creditcards.chase.com/small-business-credit-cards/ink-cash?CELL=6TKX",
-# "https://creditcards.chase.com/small-business-credit-cards/ink-business-preferred?CELL=6TKX",
+"https://creditcards.chase.com/rewards-credit-cards/chase-sapphire-preferred?CELL=6TKX&jp_aid=cc/mptarg1/int/SAPP/ccrew2",
+"https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy-boundless?CELL=6TKX&jp_aid=cc/mptarg1/int/MARC/cctrav1",
+"https://creditcards.chase.com/cash-back-credit-cards/chase-freedom?CELL=6TKX",
+"https://creditcards.chase.com/rewards-credit-cards/chase-sapphire-reserve?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/southwest-priority?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/southwest-plus?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/southwest-premier?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/united-explorer?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/united-travelbank?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/united-mileageplus-club?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/british-airways?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/aer-lingus?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy-bold?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/world-of-hyatt-credit-card?CELL=6TKX",
+"https://creditcards.chase.com/rewards-credit-cards/disney-premier?CELL=6TKX"
+"https://creditcards.chase.com/rewards-credit-cards/disney-rewards?CELL=6TKX",
+"https://creditcards.chase.com/travel-credit-cards/ihg-rewards-club-premier?CELL=6TKX",
+"https://creditcards.chase.com/rewards-credit-cards/starbucks-rewards?CELL=6TKX",
+"https://creditcards.chase.com/cash-back-credit-cards/amazon-rewards?CELL=6TKX",
+"https://creditcards.chase.com/small-business-credit-cards/ink-unlimited?CELL=6TKX",
+"https://creditcards.chase.com/small-business-credit-cards/ink-cash?CELL=6TKX",
+"https://creditcards.chase.com/small-business-credit-cards/ink-business-preferred?CELL=6TKX",
 # "https://www.americanexpress.com/us/credit-cards/card/gold-card/?eep=25330&linknav=US-Acq-Shop-Consumer-VAC-Prospect-ViewCardDetail-GoldCard",
 # "https://www.americanexpress.com/us/credit-cards/card/platinum-delta-skymiles/?eep=25330&linknav=US-Acq-Shop-Consumer-VAC-Prospect-ViewCardDetail-DeltaPlatinum",
 # "https://www.americanexpress.com/us/credit-cards/card/amex-everyday/?eep=25330&linknav=US-Acq-Shop-Consumer-VAC-Prospect-ViewCardDetail-AED",
@@ -69,49 +82,45 @@ crsr = connection.cursor()
 # crsr.execute(table)
 # crsr.execute(benefitTable)
 
-command = """INSERT INTO creditcards(id, name, credit_low, credit_high)
-VALUES (NULL, "Chase Freedom", 22, 44);"""
-crsr.execute(command)
-command =  """INSERT INTO creditcards(id, name, credit_low, credit_high)
-VALUES (NULL, "Marriott", 22, 44);"""
-crsr.execute(command)
+# command = """INSERT INTO creditcards(id, name, credit_low, credit_high)
+# VALUES (NULL, "Chase Freedom", 22, 44);"""
+# crsr.execute(command)
+# command =  """INSERT INTO creditcards(id, name, credit_low, credit_high)
+# VALUES (NULL, "Marriott", 22, 44);"""
+# crsr.execute(command)
 
-connection.commit()
+
+
+
+for data in url:
+    # New arrayeach time
+    response = requests.get(data)
+    page = urlopen(data)
+    soup = BeautifulSoup(page, "html.parser")
+    
+    for element in soup.find_all("sup"):
+        element.decompose()
+    text = soup.get_text()
+    titlebox = soup.find("h1", attrs = {'class': "card-title"})
+    # benefitsbox = soup.find("div", attrs = {'class', "primary-item"})
+    title = titlebox.text.strip()
+    print (title)
+    # benefits = benefitsbox.text.strip()
+    command = """INSERT INTO creditcards(id, name, credit_low, credit_high)
+    VALUES (NULL, '{title}', 22, 44);"""
+    command = command.format(title=title)
+    crsr.execute(command)
+    connection.commit()
 
 crsr.execute("SELECT * FROM creditcards") 
 print("fetchall:")
 result = crsr.fetchall() 
 for r in result:
     print(r)
-crsr.execute("SELECT * FROM creditcards") 
-print("\nfetch one:")
-res = crsr.fetchone() 
-print(res)
+
 
 connection.close()
 
-# CLass for credit card
-class CreditCard:
-    # There could be so many perks to havig a credit card
-    def __init__(self, name, benefits, *options):
-        self.name = name
-        self.benefits = []
-        self.benefits.append(options)
-
-
-for data in url:
-    # New arrayeach time
-    cardArray= []
-    response = requests.get(data)
-    page = urlopen(data)
-    soup = BeautifulSoup(page, "html.parser")
-    text = soup.get_text()
-
-    titlebox = soup.find("h1", attrs = {'class', "card-title"})
-    benefitsbox = soup.find("div", attrs = {'class', "primary-item"})
-    title = titlebox.text.strip()
-    benefits = benefitsbox.text().strip()
-    card = CreditCard(title, cardArray, benefits)
     # TODO STORE IN SQL DATABASE
 
 
