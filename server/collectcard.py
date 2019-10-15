@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import requests
-import mysql.connector
+import sqlite3
 # URLs to scrape through
 url = [
 "https://creditcards.chase.com/cash-back-credit-cards/chase-freedom-unlimited?CELL=6TKX&jp_aid=cc/mptarg1/int/FREU/ccrew1",
@@ -50,15 +50,24 @@ url = [
 ]
 
 # COnnect and create databse
-db = mysql.connector.connect(
-    host="127.0.0.1",
-    user="root",
-    passwd="keith",
-    auth_plugin='mysql_native_password'
-    
-)
-crsr = db.cursor()
-crsr.execute("CREATE DATABASE creditcards")
+connection = sqlite3.connect("creditcard.db")
+# MAIN TABLE
+table = """CREATE TABLE creditcards(
+id INTEGER PRIMARY KEY,
+name VARCHAR(20),
+credit_low INTEGER,
+credit_high INTEGER);
+"""
+# non main table
+benefitTable = """
+CREATE TABLE benefits(
+id INTEGER PRIMARY KEY,
+desc VARCHAR(100),
+creditcard FORIGN KEY
+)"""
+crsr = connection.cursor()
+crsr.execute(table)
+crsr.execute(benefitTable)
 
 for x in crsr:
     print(x)
@@ -89,7 +98,7 @@ for data in url:
     # TODO STORE IN SQL DATABASE
 
 
-
+connection.close()
 
 
 
