@@ -66,12 +66,29 @@ desc VARCHAR(100),
 creditcard FORIGN KEY
 )"""
 crsr = connection.cursor()
-crsr.execute(table)
-crsr.execute(benefitTable)
+# crsr.execute(table)
+# crsr.execute(benefitTable)
 
-for x in crsr:
-    print(x)
+command = """INSERT INTO creditcards(id, name, credit_low, credit_high)
+VALUES (NULL, "Chase Freedom", 22, 44);"""
+crsr.execute(command)
+command =  """INSERT INTO creditcards(id, name, credit_low, credit_high)
+VALUES (NULL, "Marriott", 22, 44);"""
+crsr.execute(command)
 
+connection.commit()
+
+crsr.execute("SELECT * FROM creditcards") 
+print("fetchall:")
+result = crsr.fetchall() 
+for r in result:
+    print(r)
+crsr.execute("SELECT * FROM creditcards") 
+print("\nfetch one:")
+res = crsr.fetchone() 
+print(res)
+
+connection.close()
 
 # CLass for credit card
 class CreditCard:
@@ -98,7 +115,7 @@ for data in url:
     # TODO STORE IN SQL DATABASE
 
 
-connection.close()
+
 
 
 
