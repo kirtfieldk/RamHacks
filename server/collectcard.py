@@ -50,10 +50,12 @@ url = [
 ]
 
 # COnnect and create databse
-db = mysql.connector(
-    host="localhost",
-    user = "keithkfield",
-    passwd="1234"
+db = mysql.connector.connect(
+    host="127.0.0.1",
+    user="root",
+    passwd="keith",
+    auth_plugin='mysql_native_password'
+    
 )
 crsr = db.cursor()
 crsr.execute("CREATE DATABASE creditcards")
