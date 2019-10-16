@@ -3,15 +3,24 @@
 # Flask as backend and JS as front end
 # User types in their credit score and we recomend good credit cards
 
+from flask import Flask, jsonify, make_response, request
+import sqlite3
 
-
-from flask import Flask
+# COnnect and create databse
 app = Flask(__name__)
-
-
+def defincrsr():
+    connection = sqlite3.connect("creditcard.db")
+    crsr = connection.cursor()
+    return crsr
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    crsr = defincrsr()
+    cards = []
+    crsr.execute("SELECT * FROM creditcards") 
+    result = crsr.fetchall() 
+    for r in result:
+        cards.append(r)
+    return jsonify(cards)
 @app.route('/api/creditcards',  methods=['GET'])
 def allCreditCards():
     # TODO DIsplay all credit cards
@@ -26,10 +35,13 @@ def addCreditCard(id):
     return "JSON Message: " + json.dumps(request.json)
 
 
-@app.route('/api/creditcard/<creditscore>', methods=['GET'])
-def matchCardToScore(creditScore):
-    #TODO matches credit card with credit score
-    return
+@app.route('/api/creditcard/<int:creditscore>', methods=['GET'])
+def matchCardToScore(creditscore):
+    crsr = defincrsr()
+    cmd = """SELECT name FROM creditcards WHERE credit_low <= '{cs}' AND '{cs}' <= credit_high""".format(cs=creditscore)
+    crsr.execute(cmd)
+    result = crsr.fetchall()    
+    return jsonify(result)
 
 @app.route('/api/adduser/<user>', methods=['POST'])
 def addUser(user):
@@ -38,19 +50,29 @@ def addUser(user):
     # request.headers['Content-Type'] == 'application/json'
     return request.json
 
-@app.route('/api/getuser/<task_id>', methods=['GET'])
-def getUser(task_id):
+@app.route('/api/getuser/<int:id>', methods=['GET'])
+def getUser(id):
     #TODO add a user when they sign up
-    request.headers['Content-Type'] == 'application/json'
-    return "JSON Message: " + json.dumps(request.json)
+    crsr = defincrsr()
+    cmd = """SELECT name FROM creditcards WHERE id='{id}'""".format(id=id)
+    crsr.execute(cmd)
+    result = crsr.fetchall()
+    return jsonify(result)
+    
 
-@app.route('/api/updateUser', methods=['PUT'])
+@app.route('/api/updateUser/<int:user>', methods=['PUT'])
 def updateUser(user):
     #TODO update a users info
+    if len(user) == 0:
+        abort(404)
+    cmd = """"""
+    
     request.headers['Content-Type'] == 'application/json'
     return "JSON Message: " + json.dumps(request.json)
 
-
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 def calcPayoffPeriod(timeFrame, cost):
     return cost / timeFram
@@ -61,4 +83,4 @@ def calcPayoffPeriod(timeFrame, cost):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
